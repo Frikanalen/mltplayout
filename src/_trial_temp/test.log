@@ -1,0 +1,8 @@
+2015-04-17 15:02:19+0200 [-] Log opened.
+2015-04-17 15:02:19+0200 [-] --> test.test_clock.ClockTestCase.testManualTime <--
+2015-04-17 15:02:19+0200 [-] --> test.test_clock.ClockTestCase.testRealtime <--
+2015-04-17 15:02:19+0200 [-] --> test.test_clock.ClockTestCase.testReset <--
+2015-04-17 15:02:19+0200 [-] --> test.test_clock.ClockTestCase.testSimulatedTime <--
+2015-04-17 15:02:19+0200 [-] --> test.test_playlist.PlaylistTestCase.testPgCache <--
+2015-04-17 15:02:19+0200 [-] --> test.test_playlist.PlaylistTestCase.testProgram <--
+2015-04-17 15:02:19+0200 [-] --> test.test_playlist.PlaylistTestCase.testSchedule <--

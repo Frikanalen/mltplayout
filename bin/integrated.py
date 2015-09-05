@@ -2,6 +2,9 @@ import logging
 import os
 import sys
 
+sys.path.append(os.path.dirname(__file__) + '/../src/')
+sys.path.append(os.path.dirname(__file__) + '/../lib/')
+
 from vision import playlist
 from vision import playout
 from vision import playoutweb

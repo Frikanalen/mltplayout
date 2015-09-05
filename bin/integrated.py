@@ -1,6 +1,7 @@
 import logging
 import os
 import sys
+from logging import handlers
 
 sys.path.append(os.path.dirname(__file__) + '/../src/')
 sys.path.append(os.path.dirname(__file__) + '/../lib/')
@@ -44,7 +45,7 @@ def setup_logging():
     logger = logging.getLogger()
     #ch = logging.StreamHandler()
     #ch.setLevel(logging.DEBUG)
-    handler = logging.handlers.TimedRotatingFileHandler(
+    handler = handlers.TimedRotatingFileHandler(
         "cache/logs/integrated_playout.log", when="D")
     handler.setLevel(logging.DEBUG)
     handler.setFormatter(logging.Formatter(log_fmt))

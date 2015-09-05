@@ -29,7 +29,9 @@ AND "VideoItem".type_id = 2;
 class RandomProvider(object):
 	headroom = 45 # seconds
 	minimum_duration = 30 # seconds
-	def __init__(self, filename=configuration.cache_root+"csvdb/jukebox_selection.csv"):
+	def __init__(self, filename=os.path.join(configuration.cache_root,
+	                                         'csvdb',
+	                                         'jukebox_selection.csv')):
 		videos = csv.reader(open(filename, "rb"), delimiter='|')
 		l = []
 		columns = []

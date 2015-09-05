@@ -1,17 +1,20 @@
+import os
+
+
 class Configuration(object):
 	config_keys = [
-		"name", 
+		"name",
 		"cache_root", "video_cache_root", "schedule_cache_root", "queue_root", "jobs_root", "depot_root",
 		"render_type", "jukebox", "video_cache_only", "ident_media_root"]
 	name = property(lambda self: self.__class__.__name__)
-	base_path = "/home/phed/code/mltplayout/mltplayout/"
-	cache_root = base_path+"cache/"
-	depot_root = base_path+"cache/depot/"
-	video_cache_root = base_path+"playout/video/"
-	schedule_cache_root = base_path+"cache/dailyplan/"
-	queue_root = cache_root+"queue/"
-	jobs_root = cache_root+"jobs/"
-	ident_media_root = base_path+"video/"
+	base_path = os.path.normpath(os.path.join(os.path.abspath(__file__), '..', '..', '..'))
+	cache_root = os.path.join(base_path, 'cache')
+	depot_root = os.path.join(base_path, 'cache', 'depot')
+	video_cache_root = os.path.join(base_path, 'playout', 'video')
+	schedule_cache_root = os.path.join(base_path, 'cache', 'dailyplan')
+	queue_root = os.path.join(cache_root, 'queue')
+	jobs_root = os.path.join(cache_root, 'jobs')
+	ident_media_root = os.path.join(base_path, 'video')
 
 	def config_strings(self):
 		l = []

@@ -48,9 +48,9 @@ def build_path(video_id, video_filename_globs=["*.avi", "*.mpg", "*.mov", "*.dv"
 		filename = _glob_path(configuration.media_root, video_id, configuration.render_type, video_filename_globs)
 	if not filename:
 		# Give up, but respond with a failure filename
-		paths = [configuration.media_root, str(video_id), configuration.render_type, video_filename_globs]
+		paths = [configuration.media_root, str(video_id), configuration.render_type]
                 print paths
-		return os.path.sep.join(paths)	
+		return os.path.sep.join(paths)
 	# Return first hit
 	return filename[0]
 		

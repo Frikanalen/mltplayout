@@ -25,7 +25,7 @@ def _glob_path(media_root, video_id, render_type, video_filename_globs):
 	return filename
 
 # TODO: Clean up this function. No, clean up the whole lookup-module
-def get_library_filename_by_id(video_id, video_filename_globs=["*.avi", "*.mpg", "*.mov", "*.dv"]):
+def get_library_filename_by_id(video_id, video_filename_globs=["*.avi", "*.mpg", "*.mov", "*.dv", "*.mp4"]):
 	# Then /media/video/1302/broadcast
 	filename = _glob_path(configuration.media_root, video_id, configuration.render_type, video_filename_globs)
 	if not filename:
@@ -36,7 +36,7 @@ def get_library_filename_by_id(video_id, video_filename_globs=["*.avi", "*.mpg",
 	return filename[0]
 
 # TODO: rename to locate_media_by_id? 
-def build_path(video_id, video_filename_globs=["*.avi", "*.mpg", "*.mov", "*.dv"]):
+def build_path(video_id, video_filename_globs=["*.avi", "*.mpg", "*.mov", "*.dv", "*.mp4"]):
 	# example path: "videos/1302/broadcast/"
 	# First look at ./cache/video/1302/broadcast
 	filename = _glob_path(configuration.video_cache_root, video_id, configuration.render_type, video_filename_globs)

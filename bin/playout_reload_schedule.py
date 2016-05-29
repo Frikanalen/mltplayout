@@ -1,3 +1,9 @@
+import os
+import sys
+
+sys.path.append(os.path.dirname(__file__) + '/../src/')
+sys.path.append(os.path.dirname(__file__) + '/../lib/')
+
 from autobahn.websocket import WebSocketClientFactory
 from autobahn.websocket import WebSocketClientProtocol
 from twisted.internet import reactor

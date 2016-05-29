@@ -22,6 +22,9 @@ IDENT_FILENAME = os.path.join(configuration.ident_media_root,
                               'FrikanalenVignett.avi')
 LOOP_FILENAME = os.path.join(configuration.ident_media_root,
                              'FrikanalenLoop.avi')
+# make sure we have the basic required files
+os.stat(IDENT_FILENAME)
+os.stat(LOOP_FILENAME)
 
 
 class Playout(object):

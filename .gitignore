@@ -3,7 +3,11 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+*.sw[pon]
+
 # Files used for development
 env
 cache/logs/
 repo/
+
+cache/dailyplan/plan*.pickle

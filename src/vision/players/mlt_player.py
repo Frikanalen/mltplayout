@@ -7,11 +7,12 @@ from vision.players.base_player import BasePlayer
 
 
 class MLTPlayer(BasePlayer):
+    consumer_type_ = 'sdl'
+
     def __init__(self, loop_filename):
         mlt.Factory().init( )
         self.profile = mlt.Profile( )
-        self.mlt_consumer = mlt.Consumer( self.profile, "sdl" )
-        #self.mlt_consumer = mlt.Consumer( self.profile, "decklink" )
+        self.mlt_consumer = mlt.Consumer(self.profile, self.consumer_type_)
         #self.mlt_consumer.set("fullscreen", 1)
         self.loop = mlt.Producer(self.profile, loop_filename)
         #self.loop.set("force_aspect_ratio", 1.0)
@@ -84,7 +85,6 @@ class MLTPlayer(BasePlayer):
     def seconds_until_end_of_playing_video(self):
         return (self.player.get_length()-self.player.get_time()) / 1000.
 
-    def snapshot(self):
-        # TODO: Change all instances of cache/ to os.path.join(configuration....)
-        filename = "cache/snapshots"
-        pass
+
+class MLTDecklinkPlayer(MLTPlayer):
+    consumer_type_ = 'decklink'

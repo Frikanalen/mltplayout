@@ -27,8 +27,9 @@ LOOP_FILENAME = os.path.join(configuration.ident_media_root,
 class Playout(object):
     zope.interface.implements(ISchedule)
 
-    def __init__(self, service,
-                 player_class='vision.players.mlt_player:MLTPlayer'):
+    def __init__(self, service, player_class=None):
+        if player_class is None:
+            player_class = configuration.player_class
         self.player = _get_class(player_class)(LOOP_FILENAME)
         self.random_provider = jukebox.RandomProvider()
         self.service = service
@@ -278,7 +279,9 @@ class PlayoutService(object):
 
 
 def start_test_player():
-    log_fmt = "%(asctime)s %(levelname)s:%(name)s %(filename)s:%(lineno)d %(message)s"
+    log_fmt = (
+        "%(asctime)s %(levelname)s:%(name)s %(filename)s:%(lineno)d "
+        "%(message)s")
     logging.basicConfig(level=logging.DEBUG, format=log_fmt)
     service = PlayoutService()
 

@@ -64,10 +64,7 @@ if __name__ == "__main__":
     schedule.update_from_pg_cache(days=14)
     # Start the player
     playout_service = playout.PlayoutService()
-    playout = playout.Playout(
-        service=playout_service,
-        #Player=playout.DummyPlayer # Add configuration option for this
-        )
+    playout = playout.Playout(service=playout_service)
 
     # Start Web
     playoutweb.start_web(None, playout_service, playout, schedule=schedule)

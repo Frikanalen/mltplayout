@@ -18,6 +18,8 @@ class Configuration(object):
     jobs_root = os.path.join(cache_root, 'jobs')
     ident_media_root = os.path.join(base_path, 'video')
 
+    player_class = 'vision.players.mlt_player:MLTDecklinkPlayer'
+
     def config_strings(self):
         l = []
         for key in self.config_keys:
@@ -38,6 +40,8 @@ class FKConfiguration(Configuration):
     render_type = 'broadcast'
     jukebox = True
     video_cache_only = False
+
+    player_class = 'vision.players.mlt_player:MLTPlayer'
 
 
 class DeveloperConfiguration(Configuration):

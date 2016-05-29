@@ -18,7 +18,7 @@ class Configuration(object):
     jobs_root = os.path.join(cache_root, 'jobs')
     ident_media_root = os.path.join(base_path, 'video')
 
-    player_class = 'vision.players.mlt_player:MLTDecklinkPlayer'
+    player_class = 'vision.players.mlt_player:MLTPlayer'
 
     def config_strings(self):
         l = []
@@ -41,7 +41,7 @@ class FKConfiguration(Configuration):
     jukebox = True
     video_cache_only = False
 
-    player_class = 'vision.players.mlt_player:MLTPlayer'
+    player_class = 'vision.players.mlt_player:MLTDecklinkPlayer'
 
 
 class DeveloperConfiguration(Configuration):

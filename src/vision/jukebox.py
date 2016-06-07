@@ -58,7 +58,7 @@ class RandomProvider(object):
 					field = int(field)
 				d[name] = field
 			if configuration.video_cache_only:
-				if not os.path.exists(lookup.build_path(d["media_id"])):
+				if not os.path.exists(lookup.locate_media_by_id(d["media_id"])):
 					continue
 			if d["duration"] < self.minimum_duration:
 				continue

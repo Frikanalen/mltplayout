@@ -44,7 +44,7 @@ class Program(object):
         if self.filename:
             return self.filename
         else:
-            return lookup.build_path(self.media_id)
+            return lookup.locate_media_by_id(self.media_id)
         
     def seconds_since_playback(self):
         dt = (clock.now() - self.program_start)
@@ -220,4 +220,3 @@ if __name__=="__main__":
     v.set_program(16, datetime.datetime.now() + delta)
     s.add(v)
     print s.get_next_program().media_id
-    

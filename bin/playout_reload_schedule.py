@@ -24,7 +24,7 @@ class SendCommandProtocol(WebSocketClientProtocol):
 
 def failed(reason):
     print "failed: %s" % reason
-
+    reactor.callLater(1.0, reactor.stop)
 
 def playout_reload_schedule(host, port):
     print("Connecting to ws://%s:%s" % (host, port))

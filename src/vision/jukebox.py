@@ -32,7 +32,11 @@ class RandomProvider(object):
     def __init__(self, filename=os.path.join(configuration.cache_root,
                                              'csvdb',
                                              'jukebox_selection.csv')):
-        videos = csv.reader(open(filename, "rb"), delimiter='|')
+        self.filename = filename
+        self.reload()
+
+    def reload(self):
+        videos = csv.reader(open(self.filename, "rb"), delimiter='|')
         l = []
         columns = []
         shortest_duration = None
@@ -65,12 +69,12 @@ class RandomProvider(object):
             if not shortest_duration or d["duration"] < shortest_duration:
                 shortest_duration = d["duration"]
             l.append(d)
-        self.videos = l
-        self.shortest_duration = shortest_duration
-        if not self.videos:
+        if not l:
             logging.warning("No videos in in jukebox")
         else:
-            logging.info("Total %i videos in jukebox. Shortest duration is %.1fs" % (len(self.videos), shortest_duration))
+            logging.info("Total %i videos in jukebox. Shortest duration is %.1fs" % (len(l), shortest_duration))
+        self.videos = l
+        self.shortest_duration = shortest_duration
 
     def get_random_video(self, length):
         # TODO: Create a full playlist program from it

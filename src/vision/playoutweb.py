@@ -51,6 +51,7 @@ class PlayoutWebsocketProtocol(WebSocketServerProtocol):
         self.service = service
         self.playout = playout
         self.schedule = schedule
+        self.random_provider = playout.random_provider
 
     def onMessage(self, frame, binary):
         cmd = frame[:frame.find(":")]
@@ -82,6 +83,7 @@ class PlayoutWebsocketProtocol(WebSocketServerProtocol):
             self.playout.start_schedule()
         elif cmd == "reload-schedule":
             self.schedule.update_from_pg_cache(days=14)
+            self.random_provider.reload()
             self.service.on_set_schedule(None)
             self.playout.start_schedule()
 

@@ -9,16 +9,16 @@ import pgsched
 # TODO: Program that represents the following: jukebox, dead air, pause, program guide, ident
 
 class Program(object):
-    """ 
+    """
     program_start
-    	datetime
+        datetime
     media_id
-    	integer
-    playback_offset 
-    	None or float in seconds
+        integer
+    playback_offset
+        None or float in seconds
     playback_duration
-    	None or float in seconds
-    	
+        None or float in seconds
+
     TODO: perhaps specify a "pase" media_id or somethign?
     """
     def __init__(self):
@@ -34,7 +34,7 @@ class Program(object):
         self.program_start = program_start
         self.media_id = media_id
         self.playback_offset = playback_offset
-        self.playback_duration = playback_duration        
+        self.playback_duration = playback_duration
         self.title = title
         self.data=data
         self.filename = filename
@@ -45,14 +45,14 @@ class Program(object):
             return self.filename
         else:
             return lookup.locate_media_by_id(self.media_id)
-        
+
     def seconds_since_playback(self):
         dt = (clock.now() - self.program_start)
         return dt.seconds + dt.microseconds / 1e6
 
     def seconds_until_playback(self):
         dt = (self.program_start - clock.now())
-    	return dt.seconds + dt.microseconds / 1e6
+        return dt.seconds + dt.microseconds / 1e6
 
     def seconds_until_end(self):
         duration = self.playback_duration
@@ -62,7 +62,7 @@ class Program(object):
             raise Exception, "No duration given for video %i" % self.media_id
         dt = (self.program_start - clock.now())
         return dt.seconds + dt.microseconds / 1e6 + duration
- 
+
     def __repr__(self):
         return "<Program #%i %r>" % (self.media_id, self.title)
 
@@ -100,16 +100,16 @@ class Program(object):
 
 class Schedule(object):
     def __init__(self):
-        self.programs = []    	
-    	
+        self.programs = []
+
     def add(self, program):
-    	self.programs.append(program)
+        self.programs.append(program)
 
     def remove(self, program):
-    	self.programs.remove(program)
-    	
+        self.programs.remove(program)
+
     def new_program(self):
-    	return Program()
+        return Program()
 
     def get_current_program(self):
         now = clock.now()
@@ -119,11 +119,11 @@ class Schedule(object):
                 # program already started
                 last = program
                 if program.playback_duration and (program.seconds_since_playback() >= program.playback_duration):
-                    last = None                
+                    last = None
             if last and program.program_start >= now:
                 break
         return last
- 
+
     def get_next_program(self):
         now = clock.now()
         next = None
@@ -164,10 +164,10 @@ class Schedule(object):
             for d in l:
                 program = self.new_program()
                 program.set_program(
-                    media_id=d["broadcast_location"], 
-                    program_start=d["starttime"], 
-                    playback_offset=0.0, 
-                    playback_duration=d["duration"] / 1000., 
+                    media_id=d["broadcast_location"],
+                    program_start=d["starttime"],
+                    playback_offset=0.0,
+                    playback_duration=d["duration"] / 1000.,
                     title=d["name"],
                     # unused:
                     # endtime, video_id, header, schedule_reagion....

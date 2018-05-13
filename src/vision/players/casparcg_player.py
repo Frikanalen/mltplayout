@@ -20,6 +20,8 @@ class CasparCGPlayer(BasePlayer):
         self.channel = 1
         self.layer = 10
         self.framerate = 25
+        watermarkimage ='/home/phed/Playout/stills/screenbug.png' 
+        self._play_file(watermarkimage, layer=15, loop=True)
 
     def _disconnect(self):
         self.socket.close()
@@ -32,28 +34,37 @@ class CasparCGPlayer(BasePlayer):
         # FIXME add code to split response in first line and the rest
         return (response, reply)
 
-    def play_program(self, program=None, resume_offset=0):
-        self.still = None
-        if program is not None:
-            media_path = program.get_filename()
-            if os.path.exists(media_path):
-                if program.loop:
+    def _play_file(self, filename, resume_offset=0, layer=None, loop=False):
+        if layer is None:
+            layer = self.layer
+        if filename is not None:
+            if os.path.exists(filename):
+                if loop:
                     loop = "LOOP"
                 else:
                     loop = ""
                 if resume_offset != 0:
                     seek = "SEEK %d" % int(resume_offset * self.framerate)
-                # FIXME media_path should be escaped, ie using \" \\, etc.
+                # FIXME filename should be escaped, ie using \" \\, etc.
                 self._send_command("PLAY %d-%d \"%s\" MIX 50 1 Linear RIGHT %s %s" % \
-                                   (self.channel, self.layer, media_path, loop, seek))
+                                   (self.channel, layer, filename, loop, seek))
             else:
                 self._send_command("CLEAR %d-%d" % (channel, layer))
-                logging.error("Didn't find file. Playback never started: %s" % media_path)
+                logging.error("Didn't find file. Playback never started: %s" % filename)
         else:
-            self._send_command("CLEAR %d-%d" % (self.channel, self.layer))
+            self._send_command("CLEAR %d-%d" % (self.channel, layer))
+
+
+    def play_program(self, program=None, resume_offset=0):
+        filename = None
+        loop = False
+        if program is not None:
+            filename = program.get_filename()
+            loop = program.loop
+        self._play_file(filename, resume_offset, self.layer, loop)
 
     def show_still(self, filename):
-        # FIXME todo
+        self._play_file(filename, resume_offset, self.layer)
 
     def pause_screen(self):
         # FIXME todo

@@ -36,7 +36,7 @@ class Configuration(object):
 
 
 class FKConfiguration(Configuration):
-    media_root = '/mnt/new_media/media/'
+    media_root = '/mnt/media/media/'
     render_type = 'broadcast'
     jukebox = True
     video_cache_only = False
@@ -51,7 +51,7 @@ class DeveloperConfiguration(Configuration):
     depot_root = 'c:/Depot'
 
 
-configuration = DeveloperConfiguration()
+configuration = FKConfiguration()
 
 if __name__ == '__main__':
     print 'Configuration details:'

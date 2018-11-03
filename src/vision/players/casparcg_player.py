@@ -12,6 +12,9 @@ import socket
 from vision.players.base_player import BasePlayer
 
 class CasparCGPlayer(BasePlayer):
+    MEDIA_LAYER = 50
+    BUG_LAYER = 100
+
     def __init__(self, loop_filename):
         self.serverhostname = "caspar.frikanalen.no"
         self.serverport = 5250
@@ -20,40 +23,49 @@ class CasparCGPlayer(BasePlayer):
         self.channel = 1
         self.layer = 10
         self.framerate = 25
-        watermarkimage ='/home/phed/Playout/stills/screenbug.png' 
+        self._send_command("CLEAR 1")
+        watermarkimage = 'screenbug'
         self._play_file(watermarkimage, layer=15, loop=True)
 
     def _disconnect(self):
         self.socket.close()
         self.socket = None
 
-    def _send_command(self, command, xmlreply = False):
+    def _send_command(self, command, xmlreply=False):
         self.socket.send("%s\r\n" % command)
+        print("Sent command %s" % (command,))
+        logging.debug("sending command %s" % (command,))
         bufsize = 4096
         response = self.socket.recv(bufsize)
         # FIXME add code to split response in first line and the rest
-        return (response, reply)
+        return (response, None)
 
     def _play_file(self, filename, resume_offset=0, layer=None, loop=False):
         if layer is None:
             layer = self.layer
         if filename is not None:
-            if os.path.exists(filename):
+            #fixme: must check caspar's own library
+            if True: # os.path.exists(filename):
+                assetname = os.path.splitext(filename)[0]
                 if loop:
                     loop = "LOOP"
                 else:
                     loop = ""
+
                 if resume_offset != 0:
                     seek = "SEEK %d" % int(resume_offset * self.framerate)
+                else:
+                    seek = ""
+
                 # FIXME filename should be escaped, ie using \" \\, etc.
-                self._send_command("PLAY %d-%d \"%s\" MIX 50 1 Linear RIGHT %s %s" % \
-                                   (self.channel, layer, filename, loop, seek))
+                self._send_command("PLAY %d-%d \"%s\" MIX 50 1 Linear RIGHT %s %s" %
+                                   (self.channel, layer, assetname, loop, seek))
             else:
-                self._send_command("CLEAR %d-%d" % (channel, layer))
-                logging.error("Didn't find file. Playback never started: %s" % filename)
+                self._send_command("CLEAR %d-%d" % (self.channel, layer))
+                logging.error(
+                    "Didn't find file. Playback never started: %s" % filename)
         else:
             self._send_command("CLEAR %d-%d" % (self.channel, layer))
-
 
     def play_program(self, program=None, resume_offset=0):
         filename = None
@@ -68,9 +80,10 @@ class CasparCGPlayer(BasePlayer):
 
     def pause_screen(self):
         # FIXME todo
+        pass
 
     def seconds_until_end_of_playing_video(self):
-                               """
+	"""
 INFO 1-10
 201 INFO OK
 <?xml version="1.0" encoding="utf-8"?>
@@ -105,7 +118,7 @@ INFO 1-10
 """
         #(code, response) = self._send_command("INFO %d-%d" % (self.channel, self.layer),
         #                                      xmlreply = True)
-        #xml = lxml...(response)
-        #layer/frame-number?
+        # xml = lxml...(response)
+        # layer/frame-number?
         # FIXME todo
         return -1

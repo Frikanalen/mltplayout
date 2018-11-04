@@ -36,7 +36,6 @@ class CasparCGPlayer(BasePlayer):
 
     def _send_command(self, command, xmlreply=False):
         self.socket.send("%s\r\n" % command)
-        print("Sent command %s" % (command,))
         logging.debug("sending command %s" % (command,))
         bufsize = 4096
         response = self.socket.recv(bufsize)
@@ -124,4 +123,5 @@ INFO 1-10
         # xml = lxml...(response)
         # layer/frame-number?
         # FIXME todo
+        logging.debug("unable to figure out time to next end")
         return -1

@@ -1,9 +1,12 @@
 """
-
 Connect to TCP port 5250 on CasparCG server and instruct it to play
 video.
 
 Protocol http://casparcg.com/wiki/CasparCG_2.1_AMCP_Protocol
+
+We use layers 10 for the fallback screen, 50 for the video playout and
+100 for the logo in the corner.
+
 """
 
 import logging
@@ -21,11 +24,11 @@ class CasparCGPlayer(BasePlayer):
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.socket.connect((self.serverhostname, self.serverport))
         self.channel = 1
-        self.layer = 10
+        self.layer = 50
         self.framerate = 25
         self._send_command("CLEAR 1")
         watermarkimage = 'screenbug'
-        self._play_file(watermarkimage, layer=15, loop=True)
+        self._play_file(watermarkimage, layer=100, loop=True)
 
     def _disconnect(self):
         self.socket.close()

@@ -11,47 +11,23 @@ We use layers 10 for the fallback screen, 50 for the video playout and
 
 import logging
 import os
-import socket
 from vision.players.base_player import BasePlayer
+from vision.players.casparcg import CasparCG
 
-class CasparCG:
-    def __init__(self):
-        self.socket = None
-
-    def disconnect(self):
-        self.socket.close()
-        self.socket = None
-
-    def connect(self, hostname, amcp_port = 5250):
-        self.hostname = hostname
-        self.amcp_port = amcp_port
-        if self.socket is not None:
-            self.disconnect()
-
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.connect((self.hostname, self.amcp_port))
-
-    def _send_command(self, command, xmlreply=False):
-        self.socket.send("%s\r\n" % command)
-        logging.debug("sending command %s" % (command,))
-        bufsize = 4096
-        response = self.socket.recv(bufsize)
-        # FIXME add code to split response in first line and the rest
-        return (response, None)
+MEDIA_LAYER = 50
+BUG_LAYER = 100
 
 class CasparCGPlayer(BasePlayer):
-    MEDIA_LAYER = 50
-    BUG_LAYER = 100
 
     def __init__(self, loop_filename):
         self.caspar = CasparCG()
         self.caspar.connect('localhost')
         self.channel = 1
-        self.layer = 50
+        self.layer = MEDIA_LAYER
         self.framerate = 25
         self.caspar._send_command("CLEAR 1")
         watermarkimage = 'screenbug'
-        self._play_file(watermarkimage, layer=100, loop=True)
+        self._play_file(watermarkimage, layer=BUG_LAYER, loop=True)
 
     def _play_file(self, filename, resume_offset=0, layer=None, loop=False):
         if layer is None:

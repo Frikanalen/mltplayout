@@ -1,5 +1,6 @@
 import socket
 import logging
+import xml.etree.ElementTree as ET
 
 class CasparCG:
     def __init__(self):
@@ -44,29 +45,53 @@ class CasparCG:
         # 
         # 202 [command] OK - The command has been executed.        
         
-        returned_data = ''
-
         if return_code == 200: # multiline returned_data
-            while returned_data[-4:] != '\r\n\r\n':
-                returned_data += self.socket.recv(512)
+            returned_data_buffer = ''
 
-            returned_data = response.splitlines()
+            while returned_data_buffer[-4:] != '\r\n\r\n':
+                returned_data_buffer += self.socket.recv(512)
+
+            returned_data = returned_data_buffer.splitlines()[:-1]
+
         elif return_code == 201: # single-line returned_data
+            returned_data = ''
             while returned_data[-2:] != '\r\n':
                 returned_data += self.socket.recv(512)
-        elif return_code == 202:
+
+        elif return_code == 202: # no data returned
             returned_data = None
+
         else:
             raise ValueError('CasparCG command failed: ' + response)
 
-        return (return_code, returned_data)
+        return returned_data
 
     def _send_command(self, command, xmlreply=False):
         self.socket.send("%s\r\n" % command)
         logging.debug("sending command %s" % (command,))
-        return self._read_reply()[1]
+        return self._read_reply()
+
+    def _get_info(self):
+        raise NotImplementedError("I'm not done with this function yet")
+        channels = {}
+        for line in self._send_command('INFO'):
+            (channel_id, video_standard, status) = line.split(' ', 3)
+            channels[int(channel_id)] = {'standard': video_standard, 'status': status}
+
+        for channel_id in channels.keys():
+            xml_string = self._send_command('INFO %d' % (channel_id,))
+            for i, num in enumerate(xml_string.splitlines()):
+                print i, num
+            # This hack needs doing because CasparCG emits malformed 
+            # XML: (<|</)(?P<number>[0-9]?)>
+            #root = ET.fromstring(xml_string)
+
+    @property
+    def layers(self):
+        pass
 
 if __name__ == '__main__':
     c = CasparCG()
     c.connect('localhost')
-    print(c._send_command('INFO 1-50'))
+    #print(c._send_command('INFO 1-50'))
+    c._get_info()

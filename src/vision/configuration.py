@@ -36,13 +36,13 @@ class Configuration(object):
 
 
 class FKConfiguration(Configuration):
-    media_root = '/mnt/media/media/'
+    media_root = '' #/mnt/media/media/'
     render_type = 'broadcast'
     jukebox = True
     video_cache_only = False
 
 class DeveloperConfiguration(Configuration):
-    media_root = './repo/testmedia/media'
+    media_root = '' # './repo/testmedia/media'
     video_cache_root = './repo/video/'
     ident_media_root = './repo/ident/'
     render_type = ''

@@ -46,6 +46,12 @@ class CasparCGPlayer(BasePlayer):
         if layer is None:
             layer = self.layer
         if filename is not None:
+            print('CasparCG is being asked to play filename' + filename)
+            # ffs. 
+            if '/' in filename:
+                fullpath = '/mnt/media/' + filename
+                print(os.listdir(fullpath))
+                filename = 'library/' +  filename + '/' + os.listdir(fullpath)[0]
             #fixme: must check caspar's own library
             if True: # os.path.exists(filename):
                 assetname = os.path.splitext(filename)[0]

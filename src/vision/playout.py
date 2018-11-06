@@ -17,14 +17,17 @@ from configuration import configuration
 
 # TODO: Ident, loop, etc should be full program obects and not be
 # hardcoded in playout.py
+# TODO: This part of the code should _only_ concern itself with relative paths.
 IDENT_LENGTH = 27.0
-IDENT_FILENAME = os.path.join(configuration.ident_media_root,
-                              'FrikanalenVignett.avi')
-LOOP_FILENAME = os.path.join(configuration.ident_media_root,
-                             'FrikanalenLoop.avi')
+#IDENT_FILENAME = os.path.join(configuration.ident_media_root,
+#                              'FrikanalenVignett.avi')
+#LOOP_FILENAME = os.path.join(configuration.ident_media_root,
+#                             'FrikanalenLoop.avi')
+IDENT_FILENAME = 'FrikanalenVignett.avi'
+LOOP_FILENAME = 'FrikanalenLoop.avi'
 # make sure we have the basic required files
-os.stat(IDENT_FILENAME)
-os.stat(LOOP_FILENAME)
+#os.stat(IDENT_FILENAME)
+#os.stat(LOOP_FILENAME)
 
 
 class Playout(object):

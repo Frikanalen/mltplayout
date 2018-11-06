@@ -51,13 +51,13 @@ class CasparCG:
                 returned_data += self.socket.recv(512)
 
             returned_data = response.splitlines()
-
-        if return_code == 201: # single-line returned_data
+        elif return_code == 201: # single-line returned_data
             while returned_data[-2:] != '\r\n':
                 returned_data += self.socket.recv(512)
-
-        if return_code == 202:
+        elif return_code == 202:
             returned_data = None
+        else:
+            raise ValueError('CasparCG command failed: ' + response)
 
         return (return_code, returned_data)
 

@@ -14,25 +14,22 @@ import os
 import socket
 from vision.players.base_player import BasePlayer
 
-class CasparCGPlayer(BasePlayer):
-    MEDIA_LAYER = 50
-    BUG_LAYER = 100
+class CasparCG:
+    def __init__(self):
+        self.socket = None
 
-    def __init__(self, loop_filename):
-        self.serverhostname = "caspar.frikanalen.no"
-        self.serverport = 5250
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.connect((self.serverhostname, self.serverport))
-        self.channel = 1
-        self.layer = 50
-        self.framerate = 25
-        self._send_command("CLEAR 1")
-        watermarkimage = 'screenbug'
-        self._play_file(watermarkimage, layer=100, loop=True)
-
-    def _disconnect(self):
+    def disconnect(self):
         self.socket.close()
         self.socket = None
+
+    def connect(self, hostname, amcp_port = 5250):
+        self.hostname = hostname
+        self.amcp_port = amcp_port
+        if self.socket is not None:
+            self.disconnect()
+
+        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.socket.connect((self.hostname, self.amcp_port))
 
     def _send_command(self, command, xmlreply=False):
         self.socket.send("%s\r\n" % command)
@@ -41,6 +38,20 @@ class CasparCGPlayer(BasePlayer):
         response = self.socket.recv(bufsize)
         # FIXME add code to split response in first line and the rest
         return (response, None)
+
+class CasparCGPlayer(BasePlayer):
+    MEDIA_LAYER = 50
+    BUG_LAYER = 100
+
+    def __init__(self, loop_filename):
+        self.caspar = CasparCG()
+        self.caspar.connect('localhost')
+        self.channel = 1
+        self.layer = 50
+        self.framerate = 25
+        self.caspar._send_command("CLEAR 1")
+        watermarkimage = 'screenbug'
+        self._play_file(watermarkimage, layer=100, loop=True)
 
     def _play_file(self, filename, resume_offset=0, layer=None, loop=False):
         if layer is None:
@@ -66,14 +77,14 @@ class CasparCGPlayer(BasePlayer):
                     seek = ""
 
                 # FIXME filename should be escaped, ie using \" \\, etc.
-                self._send_command("PLAY %d-%d \"%s\" MIX 50 1 Linear RIGHT %s %s" %
+                self.caspar._send_command("PLAY %d-%d \"%s\" MIX 50 1 Linear RIGHT %s %s" %
                                    (self.channel, layer, assetname, loop, seek))
             else:
-                self._send_command("CLEAR %d-%d" % (self.channel, layer))
+                self.caspar._send_command("CLEAR %d-%d" % (self.channel, layer))
                 logging.error(
                     "Didn't find file. Playback never started: %s" % filename)
         else:
-            self._send_command("CLEAR %d-%d" % (self.channel, layer))
+            self.caspar._send_command("CLEAR %d-%d" % (self.channel, layer))
 
     def play_program(self, program=None, resume_offset=0):
         filename = None

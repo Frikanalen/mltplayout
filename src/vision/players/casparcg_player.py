@@ -31,35 +31,40 @@ class CasparCGPlayer(BasePlayer):
     def _play_file(self, filename, resume_offset=0, layer=None, loop=False):
         if layer is None:
             layer = self.media_layer
+
         if filename is not None:
-            print('CasparCG is being asked to play filename' + filename)
+            print('CasparCG is being asked to play filename ' + filename)
+
             # ffs. 
             if '/' in filename:
                 fullpath = '/mnt/media/' + filename
                 print(os.listdir(fullpath))
                 filename = 'library/' +  filename + '/' + os.listdir(fullpath)[0]
-            #fixme: must check caspar's own library
+
+	    if resume_offset != 0:
+		seek = int(resume_offset * self.framerate)
+	    else:
+		seek = 0
+
             if True: # os.path.exists(filename):
                 assetname = os.path.splitext(filename)[0]
-                if loop:
-                    loop = "LOOP"
-                else:
-                    loop = ""
-
-                if resume_offset != 0:
-                    seek = "SEEK %d" % int(resume_offset * self.framerate)
-                else:
-                    seek = ""
-
-                # FIXME filename should be escaped, ie using \" \\, etc.
-                self.caspar._send_command("PLAY %s \"%s\" MIX 50 1 Linear RIGHT %s %s" %
-                                   (layer.name, assetname, loop, seek))
+                try: 
+                    # FIXME filename should be escaped, ie using \" \\, etc.
+                    layer.play(
+                            filename = assetname,
+                            transition = 'MIX 50 1 LINEAR RIGHT',
+                            loop = loop,
+                            seek = seek)
+                except:
+                    layer.clear()
+                    logging.error("Failed to play file: %s" % filename)
+                    raise
             else:
                 layer.clear()
                 logging.error(
                     "Didn't find file. Playback never started: %s" % filename)
         else:
-            self.caspar._send_command("CLEAR %d-%d" % (self.channel.id, layer))
+            layer.clear()
 
     def play_program(self, program=None, resume_offset=0):
         filename = None

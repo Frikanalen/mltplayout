@@ -20,6 +20,23 @@ class CasparLayer():
     def clear(self):
         self.caspar._send_command('CLEAR %s' % (self.name,))
 
+    def play(self, filename, transition = None, loop = False, seek = False):
+        command = 'PLAY ' + self.name + ' '
+
+        #FIXME: file name needs proper escaping
+        command += '"' + filename + '" '
+
+        if transition:
+            command += transition + ' '
+
+        if loop:
+            command += 'LOOP '
+
+        if seek:
+            command += 'SEEK %d ' % (seek,)
+
+        self.caspar._send_command(command)
+
 class CasparChannel():
     def __init__(self, caspar_instance, channel_id):
         self.channel_id = channel_id

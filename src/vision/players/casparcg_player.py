@@ -11,8 +11,10 @@ We use layers 10 for the fallback screen, 50 for the video playout and
 
 import logging
 import os
+from pathlib import Path
 from vision.players.base_player import BasePlayer
 from vision.players.casparcg import CasparCG
+from ..configuration import configuration
 
 MEDIA_LAYER = 50
 BUG_LAYER = 100
@@ -33,10 +35,9 @@ class CasparCGPlayer(BasePlayer):
         if filename is not None:
             logging.debug('CasparCG is being asked to play filename %s', filename)
 
-            # ffs. 
+            # To check 
             if '/' in filename:
-                fullpath = '/mnt/media/' + filename
-                filename = 'library/' +  filename + '/' + os.listdir(fullpath)[0]
+                filename = 'library/%s' % (Path(filename).relative_to(configuration.media_root),)
 
 	    if resume_offset != 0:
 		seek = int(resume_offset * self.channel.framerate)
@@ -45,7 +46,7 @@ class CasparCGPlayer(BasePlayer):
 
             if True: # os.path.exists(filename):
                 assetname = os.path.splitext(filename)[0]
-                try: 
+                try:
                     # FIXME filename should be escaped, ie using \" \\, etc.
                     layer.play(
                             filename = assetname,

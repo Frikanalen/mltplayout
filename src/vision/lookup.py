@@ -33,7 +33,7 @@ def locate_media_by_id(video_id, video_filename_globs=VIDEO_FILENAME_GLOBS):
         # Then ./cache/video/1302/
         filename = _glob_path(configuration.video_cache_root, video_id, '', video_filename_globs)
     if not filename:
-        # Then /media/video/1302/broadcast
+        # Then (media_root)/1302/broadcast
         filename = _glob_path(configuration.media_root, video_id, configuration.render_type, video_filename_globs)
     if not filename:
         # Give up

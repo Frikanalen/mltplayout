@@ -86,18 +86,18 @@ class CasparCG:
         logging.debug('CasparCG replied %s' % (response.strip(),))
 
         response = ''
-        
+
         # From the AMCP spec:
         #
         # 200 [command] OK - The command has been executed and several lines of
         # data (seperated by \r\n) are being returned (terminated with an
-        # additional \r\n) 
+        # additional \r\n)
         #
         # 201 [command] OK - The command has been executed and
         # data (terminated by \r\n) is being returned.
-        # 
-        # 202 [command] OK - The command has been executed.        
-        
+        #
+        # 202 [command] OK - The command has been executed.
+
         if return_code == 200: # multiline returned_data
             returned_data_buffer = ''
 

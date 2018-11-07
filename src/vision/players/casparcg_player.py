@@ -18,12 +18,10 @@ MEDIA_LAYER = 50
 BUG_LAYER = 100
 
 class CasparCGPlayer(BasePlayer):
-
     def __init__(self, loop_filename):
         self.caspar = CasparCG('localhost')
         self.channel = self.caspar.channel(1)
         self.media_layer = self.channel.layer(MEDIA_LAYER)
-        self.framerate = 25
         self.channel.clear()
         watermarkimage = 'screenbug'
         self._play_file(watermarkimage, layer=self.channel.layer(BUG_LAYER), loop=True)
@@ -42,7 +40,7 @@ class CasparCGPlayer(BasePlayer):
                 filename = 'library/' +  filename + '/' + os.listdir(fullpath)[0]
 
 	    if resume_offset != 0:
-		seek = int(resume_offset * self.framerate)
+		seek = int(resume_offset * self.channel.framerate)
 	    else:
 		seek = 0
 

@@ -43,6 +43,11 @@ class CasparChannel():
         self.caspar = caspar_instance
 
     @property
+    def framerate(self):
+        self.caspar._get_info()
+        return self.caspar._channels[self.channel_id]['framerate']
+
+    @property
     def name(self):
         return '%d' % (self.channel_id,)
 
@@ -124,8 +129,10 @@ class CasparCG:
         for line in self._send_command('INFO'):
             (channel_id, video_standard, status) = line.split(' ', 3)
             self._channels[int(channel_id)] = {'standard': video_standard, 'status': status}
+            (resolution, refreshmode, framerate) = re.match(r'([0-9]+)(.)([0-9]+)', video_standard).groups()
+            self._channels[int(channel_id)]['framerate'] = float(framerate) / 100
 
-        for channel_id in channels.keys():
+        for channel_id in self._channels.keys():
             xml_string = self._send_command('INFO %d' % (channel_id,))
             # This hack needs doing because CasparCG emits malformed XML; tags must begin with alpha...
             xml_string = re.sub(r'(?P<start><|</)(?P<number>[0-9]+?)>', '\g<start>tag\g<number>>', xml_string, 0)
@@ -154,4 +161,4 @@ class CasparCG:
 if __name__ == '__main__':
     c = CasparCG('localhost')
     #print(c._send_command('INFO 1-50'))
-    print c.layers
+    print c.channel(1).framerate

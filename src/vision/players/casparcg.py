@@ -1,16 +1,47 @@
 import socket
 import logging
 import xml.etree.ElementTree as ET
+import re
+
+class CasparLayer():
+    def __init__(self, caspar_instance, channel_id, layer_id):
+        self.layer_id = layer_id
+        self.channel_id = channel_id
+        self.caspar = caspar_instance
+
+    @property
+    def name(self):
+        return '%d-%d' % (self.channel_id, self.layer_id)
+
+    @property
+    def id(self):
+        return self.layer_id
+
+    def clear(self):
+        self.caspar._send_command('CLEAR %s' % (self.name,))
+
+class CasparChannel():
+    def __init__(self, caspar_instance, channel_id):
+        self.channel_id = channel_id
+        self.caspar = caspar_instance
+
+    @property
+    def name(self):
+        return '%d' % (self.channel_id,)
+
+    @property
+    def id(self):
+        return self.channel_id
+
+    def layer(self, layer_id):
+        return CasparLayer(self.caspar, self.channel_id, layer_id)
+
+    def clear(self):
+        self.caspar._send_command('CLEAR %s' % (self.name,))
 
 class CasparCG:
-    def __init__(self):
+    def __init__(self, hostname, amcp_port = 5250):
         self.socket = None
-
-    def disconnect(self):
-        self.socket.close()
-        self.socket = None
-
-    def connect(self, hostname, amcp_port = 5250):
         self.hostname = hostname
         self.amcp_port = amcp_port
         if self.socket is not None:
@@ -72,26 +103,38 @@ class CasparCG:
         return self._read_reply()
 
     def _get_info(self):
-        raise NotImplementedError("I'm not done with this function yet")
-        channels = {}
+        self._channels = {}
         for line in self._send_command('INFO'):
             (channel_id, video_standard, status) = line.split(' ', 3)
-            channels[int(channel_id)] = {'standard': video_standard, 'status': status}
+            self._channels[int(channel_id)] = {'standard': video_standard, 'status': status}
 
         for channel_id in channels.keys():
             xml_string = self._send_command('INFO %d' % (channel_id,))
-            for i, num in enumerate(xml_string.splitlines()):
-                print i, num
-            # This hack needs doing because CasparCG emits malformed 
-            # XML: (<|</)(?P<number>[0-9]?)>
-            #root = ET.fromstring(xml_string)
+            # This hack needs doing because CasparCG emits malformed XML; tags must begin with alpha...
+            xml_string = re.sub(r'(?P<start><|</)(?P<number>[0-9]+?)>', '\g<start>tag\g<number>>', xml_string, 0)
+            root = ET.fromstring(xml_string)
+            self._layers = {}
+            for child in root.findall("stage/layer/"):
+                layer_id = int(re.match(r'...(?P<number>[0-9]+)$', child.tag).group('number'))
+                self._layers[layer_id] = child
+
+    @property
+    def channels(self):
+        self._get_info()
+        return self._layers
+
+    def layer(self, channel_id, layer_id):
+        return CasparLayer(self, channel_id, layer_id)
+
+    def channel(self, channel_id):
+        return CasparChannel(self, channel_id)
 
     @property
     def layers(self):
-        pass
+        self._get_info()
+        return self._layers
 
 if __name__ == '__main__':
-    c = CasparCG()
-    c.connect('localhost')
+    c = CasparCG('localhost')
     #print(c._send_command('INFO 1-50'))
-    c._get_info()
+    print c.layers

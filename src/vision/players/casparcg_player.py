@@ -20,18 +20,17 @@ BUG_LAYER = 100
 class CasparCGPlayer(BasePlayer):
 
     def __init__(self, loop_filename):
-        self.caspar = CasparCG()
-        self.caspar.connect('localhost')
-        self.channel = 1
-        self.layer = MEDIA_LAYER
+        self.caspar = CasparCG('localhost')
+        self.channel = self.caspar.channel(1)
+        self.media_layer = self.channel.layer(MEDIA_LAYER)
         self.framerate = 25
-        self.caspar._send_command("CLEAR 1")
+        self.channel.clear()
         watermarkimage = 'screenbug'
-        self._play_file(watermarkimage, layer=BUG_LAYER, loop=True)
+        self._play_file(watermarkimage, layer=self.channel.layer(BUG_LAYER), loop=True)
 
     def _play_file(self, filename, resume_offset=0, layer=None, loop=False):
         if layer is None:
-            layer = self.layer
+            layer = self.media_layer
         if filename is not None:
             print('CasparCG is being asked to play filename' + filename)
             # ffs. 
@@ -53,14 +52,14 @@ class CasparCGPlayer(BasePlayer):
                     seek = ""
 
                 # FIXME filename should be escaped, ie using \" \\, etc.
-                self.caspar._send_command("PLAY %d-%d \"%s\" MIX 50 1 Linear RIGHT %s %s" %
-                                   (self.channel, layer, assetname, loop, seek))
+                self.caspar._send_command("PLAY %s \"%s\" MIX 50 1 Linear RIGHT %s %s" %
+                                   (layer.name, assetname, loop, seek))
             else:
-                self.caspar._send_command("CLEAR %d-%d" % (self.channel, layer))
+                layer.clear()
                 logging.error(
                     "Didn't find file. Playback never started: %s" % filename)
         else:
-            self.caspar._send_command("CLEAR %d-%d" % (self.channel, layer))
+            self.caspar._send_command("CLEAR %d-%d" % (self.channel.id, layer))
 
     def play_program(self, program=None, resume_offset=0):
         filename = None
@@ -68,7 +67,7 @@ class CasparCGPlayer(BasePlayer):
         if program is not None:
             filename = program.get_filename()
             loop = program.loop
-        self._play_file(filename, resume_offset, self.layer, loop)
+        self._play_file(filename, resume_offset, self.media_layer, loop)
 
     def show_still(self, filename):
         self._play_file(filename, resume_offset, self.layer)

@@ -83,7 +83,7 @@ class CasparCG:
         while response[-2:] != '\r\n':
             response += self.socket.recv(1)
 
-        logging.debug('CasparCG replied %s' % (response,))
+        logging.debug('CasparCG replied %s' % (response.strip(),))
 
         response = ''
         

@@ -31,12 +31,11 @@ class CasparCGPlayer(BasePlayer):
             layer = self.media_layer
 
         if filename is not None:
-            print('CasparCG is being asked to play filename ' + filename)
+            logging.debug('CasparCG is being asked to play filename %s', filename)
 
             # ffs. 
             if '/' in filename:
                 fullpath = '/mnt/media/' + filename
-                print(os.listdir(fullpath))
                 filename = 'library/' +  filename + '/' + os.listdir(fullpath)[0]
 
 	    if resume_offset != 0:

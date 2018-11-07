@@ -15,8 +15,8 @@ File.contentTypes.update(
 from twisted.internet import reactor
 from twisted.internet.protocol import ClientCreator
 from twisted.web.client import getPage
-import clock
-import playlist
+from . import clock
+from . import playlist
 
 class SchedulesPage(Resource):
     def __init__(self, schedule):
@@ -44,7 +44,8 @@ class StillsListPage(Resource):
         return s.encode("utf-8")
 
 # TODO: There's no security. Use proper websocket-rpc instead of this silly protocol
-from autobahn.websocket import WebSocketServerFactory, WebSocketServerProtocol
+from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerProtocol
+
 class PlayoutWebsocketProtocol(WebSocketServerProtocol):
     def __init__(self, service, playout=None, schedule=None):
         #WebSocketServerProtocol.__init__(self)

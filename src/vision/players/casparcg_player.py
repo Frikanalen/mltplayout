@@ -39,10 +39,10 @@ class CasparCGPlayer(BasePlayer):
             if '/' in filename:
                 filename = 'library/%s' % (Path(filename).relative_to(configuration.media_root),)
 
-	    if resume_offset != 0:
-		seek = int(resume_offset * self.channel.framerate)
-	    else:
-		seek = 0
+            if resume_offset != 0:
+                seek = int(resume_offset * self.channel.framerate)
+            else:
+                seek = 0
 
             if True: # os.path.exists(filename):
                 assetname = os.path.splitext(filename)[0]
@@ -80,7 +80,7 @@ class CasparCGPlayer(BasePlayer):
         pass
 
     def seconds_until_end_of_playing_video(self):
-	"""
+        """
 INFO 1-10
 201 INFO OK
 <?xml version="1.0" encoding="utf-8"?>

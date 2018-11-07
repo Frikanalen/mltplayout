@@ -54,5 +54,5 @@ class DeveloperConfiguration(Configuration):
 configuration = FKConfiguration()
 
 if __name__ == '__main__':
-    print 'Configuration details:'
-    print configuration.config_strings()
+    print('Configuration details:')
+    print((configuration.config_strings()))

@@ -1,9 +1,9 @@
 import logging
 import datetime
-import clock
+from . import clock
 import json
-import lookup
-import pgsched
+from . import lookup
+from . import pgsched
 
 # TODO: Need a Program that represents a generic program on disk w/o being scheduled
 # TODO: Program that represents the following: jukebox, dead air, pause, program guide, ident
@@ -59,7 +59,7 @@ class Program(object):
         if not duration:
             duration = self.get(duration)
         if not duration:
-            raise Exception, "No duration given for video %i" % self.media_id
+            raise Exception("No duration given for video %i" % self.media_id)
         dt = (self.program_start - clock.now())
         return dt.seconds + dt.microseconds / 1e6 + duration
 
@@ -214,9 +214,9 @@ if __name__=="__main__":
     v.set_program(15, datetime.datetime.now() + delta)
     assert(v.seconds_until_playback() > 9)
     s.add(v)
-    print s.get_next_program().media_id
+    print((s.get_next_program().media_id))
     delta = datetime.timedelta(0, 5) # 5 seconds
     v = s.new_program()
     v.set_program(16, datetime.datetime.now() + delta)
     s.add(v)
-    print s.get_next_program().media_id
+    print((s.get_next_program().media_id))

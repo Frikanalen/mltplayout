@@ -24,9 +24,9 @@ class MLTPlayer(BasePlayer):
         self.pause_screen()
         #self.mlt_consumer.listen("producer-changed", None, self.blah )
         self.mlt_consumer.start( )
-        print "MLT profile desc", self.profile.description()
-        print "Framerate", self.profile.frame_rate_num()
-        print "Width/Height/Progressive", self.profile.width(), self.profile.height(), self.profile.progressive()
+        print(("MLT profile desc", self.profile.description()))
+        print(("Framerate", self.profile.frame_rate_num()))
+        print(("Width/Height/Progressive", self.profile.width(), self.profile.height(), self.profile.progressive()))
 
     def _error(self, foo):
         logging.critical("libvlc event: MediaPlayerEncounteredError - Playback probably stopped and screen black.")

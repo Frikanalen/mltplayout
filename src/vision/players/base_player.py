@@ -1,9 +1,7 @@
 from abc import ABCMeta, abstractmethod
 
 
-class BasePlayer(object):
-    __metaclass__ = ABCMeta
-
+class BasePlayer(object, metaclass=ABCMeta):
     def __init__(self, loop_filename):
         pass
 

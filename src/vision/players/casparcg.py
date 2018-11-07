@@ -80,10 +80,10 @@ class CasparCG:
         except ValueError:
             raise ValueError('Did not receive numeric return code from CasparCG')
 
-        while response[-2:] != '\r\n':
+        while response[-2:] != b'\r\n':
             response += self.socket.recv(1)
 
-        logging.debug('CasparCG replied %s' % (response.strip(),))
+        logging.debug('CasparCG replied %s' % (response.strip().decode('UTF-8'),))
 
         response = ''
 
@@ -101,14 +101,14 @@ class CasparCG:
         if return_code == 200: # multiline returned_data
             returned_data_buffer = ''
 
-            while returned_data_buffer[-4:] != '\r\n\r\n':
+            while returned_data_buffer[-4:] != b'\r\n\r\n':
                 returned_data_buffer += self.socket.recv(512)
 
             returned_data = returned_data_buffer.splitlines()[:-1]
 
         elif return_code == 201: # single-line returned_data
             returned_data = ''
-            while returned_data[-2:] != '\r\n':
+            while returned_data[-2:] != b'\r\n':
                 returned_data += self.socket.recv(512)
 
         elif return_code == 202: # no data returned
@@ -120,7 +120,7 @@ class CasparCG:
         return returned_data
 
     def _send_command(self, command, xmlreply=False):
-        self.socket.send("%s\r\n" % command)
+        self.socket.send(('%s\r\n' % command).encode('UTF-8'))
         logging.debug("sending command %s" % (command,))
         return self._read_reply()
 
@@ -132,7 +132,7 @@ class CasparCG:
             (resolution, refreshmode, framerate) = re.match(r'([0-9]+)(.)([0-9]+)', video_standard).groups()
             self._channels[int(channel_id)]['framerate'] = float(framerate) / 100
 
-        for channel_id in self._channels.keys():
+        for channel_id in list(self._channels.keys()):
             xml_string = self._send_command('INFO %d' % (channel_id,))
             # This hack needs doing because CasparCG emits malformed XML; tags must begin with alpha...
             xml_string = re.sub(r'(?P<start><|</)(?P<number>[0-9]+?)>', '\g<start>tag\g<number>>', xml_string, 0)
@@ -161,4 +161,4 @@ class CasparCG:
 if __name__ == '__main__':
     c = CasparCG('localhost')
     #print(c._send_command('INFO 1-50'))
-    print c.channel(1).framerate
+    print((c.channel(1).framerate))

@@ -4,15 +4,15 @@ import os
 import csv
 import random
 import logging
-import lookup
-from configuration import configuration
+from . import lookup
+from .configuration import configuration
 def unicode_csv_reader(unicode_csv_data, dialect=csv.excel, **kwargs):
     # csv.py doesn't do Unicode; encode temporarily as UTF-8:
     csv_reader = csv.reader(utf_8_decoder(unicode_csv_data),
                             dialect=dialect, **kwargs)
     for row in csv_reader:
         # decode UTF-8 back to Unicode, cell by cell:
-        yield [unicode(cell, 'utf-8') for cell in row]
+        yield [str(cell, 'utf-8') for cell in row]
 
 def utf_8_decoder(unicode_csv_data):
     for line in unicode_csv_data:
@@ -36,7 +36,7 @@ class RandomProvider(object):
         self.reload()
 
     def reload(self):
-        videos = csv.reader(open(self.filename, "rb"), delimiter='|')
+        videos = csv.reader(open(self.filename, "r"), delimiter='|')
         l = []
         columns = []
         shortest_duration = None
@@ -47,7 +47,7 @@ class RandomProvider(object):
             d = {}
             for name, field in zip(columns, row):
                 if name == "name":
-                    field = field.decode("utf-8")
+                    field = field
                 elif name == "duration":
                     field = float(field)
                 elif name == "location":

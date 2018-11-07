@@ -4,7 +4,7 @@ import glob
 import logging
 import os.path
 
-from configuration import configuration
+from .configuration import configuration
 
 
 VIDEO_FILENAME_GLOBS = ['*.avi', '*.mpg', '*.mov', '*.dv', '*.mp4']

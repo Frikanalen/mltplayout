@@ -63,10 +63,10 @@ reset()
 #set(SimulatedTime(now(), ratio=1.0))
 
 if __name__=="__main__":
-    print "delta", timemachine_delta
-    print "clock.now():", now()
+    print(("delta", timemachine_delta))
+    print(("clock.now():", now()))
     timemachine_delta = datetime.timedelta()
     #print "modified", now()
     reset()
-    print "reset", now()
+    print(("reset", now()))
 

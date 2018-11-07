@@ -4,8 +4,8 @@ import os
 from twisted.python import log
 from twisted.enterprise import adbapi
 #import twistedpg
-import lookup
-from configuration import configuration
+from . import lookup
+from .configuration import configuration
 
 #dbpool = adbapi.ConnectionPool("twistedpg", "host=borch.frikanalen.no port=5433 user=postgres password=SECRET dbname=frikanalen") # fyll inn!
 

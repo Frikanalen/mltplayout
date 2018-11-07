@@ -9,10 +9,10 @@ from twisted.internet import reactor
 from twistedschedule.interfaces import ISchedule
 from twistedschedule.task import ScheduledCall
 
-import clock
-import jukebox
-import playlist
-from configuration import configuration
+from . import clock
+from . import jukebox
+from . import playlist
+from .configuration import configuration
 
 
 # TODO: Ident, loop, etc should be full program obects and not be
@@ -30,8 +30,8 @@ LOOP_FILENAME = 'FrikanalenLoop.avi'
 #os.stat(LOOP_FILENAME)
 
 
+@zope.interface.implementer(ISchedule)
 class Playout(object):
-    zope.interface.implements(ISchedule)
 
     def __init__(self, service, player_class=None):
         if player_class is None:
@@ -268,19 +268,19 @@ class PlayoutService(object):
         del self.observers[observer]
 
     def on_playback_started(self, program):
-        for each in self.observers.keys():
+        for each in list(self.observers.keys()):
             each.on_playback_started(program)
 
     def on_still(self, name):
-        for each in self.observers.keys():
+        for each in list(self.observers.keys()):
             each.on_still(name)
 
     def on_set_schedule(self, program):
-        for each in self.observers.keys():
+        for each in list(self.observers.keys()):
             each.on_set_schedule(program)
 
     def on_set_next_program(self, program):
-        for each in self.observers.keys():
+        for each in list(self.observers.keys()):
             each.on_set_next_program(program)
 
 
@@ -301,7 +301,7 @@ def start_test_player():
         v = schedule.new_program()
         v.set_program(1758, clock.now() + delta, title="No %i" % n,
                       playback_offset=30+60*n, playback_duration=9.0)
-        print "Added %i @ %s" % (n, v.program_start)
+        print(("Added %i @ %s" % (n, v.program_start)))
         schedule.add(v)
     player = Playout(service)
     player.set_schedule(schedule)

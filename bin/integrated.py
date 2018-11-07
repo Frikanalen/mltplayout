@@ -15,10 +15,10 @@ from vision.configuration import configuration
 def sanity_test():
     # TODO: Create a proper sanity test
     if not os.path.isdir("cache/dailyplan"):
-        print "The directory 'cache/dailyplan' has to exist in work directory"
+        print("The directory 'cache/dailyplan' has to exist in work directory")
         sys.exit(1)
     if not os.path.isdir("cache/logs"):
-        print "The directory 'cache/logs' has to exist in work directory"
+        print("The directory 'cache/logs' has to exist in work directory")
         sys.exit(1)
     """
     # Not needed yet

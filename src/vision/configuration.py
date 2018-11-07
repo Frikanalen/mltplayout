@@ -36,7 +36,7 @@ class Configuration(object):
 
 
 class FKConfiguration(Configuration):
-    media_root = '/mnt/media/media/'
+    media_root = '/mnt/media'
     render_type = 'broadcast'
     jukebox = True
     video_cache_only = False

@@ -5,3 +5,5 @@ git+git://github.com/Frikanalen/python-vlc.git@fixed_setup_py#egg=python-vlc
 
 # You also need VLC, MLT and mlt-python, but those are better done through your
 # OS package manager.
+
+pathlib

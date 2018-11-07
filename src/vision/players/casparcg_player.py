@@ -11,63 +11,58 @@ We use layers 10 for the fallback screen, 50 for the video playout and
 
 import logging
 import os
-import socket
+from pathlib import Path
 from vision.players.base_player import BasePlayer
+from vision.players.casparcg import CasparCG
+from ..configuration import configuration
+
+MEDIA_LAYER = 50
+BUG_LAYER = 100
 
 class CasparCGPlayer(BasePlayer):
-    MEDIA_LAYER = 50
-    BUG_LAYER = 100
-
     def __init__(self, loop_filename):
-        self.serverhostname = "caspar.frikanalen.no"
-        self.serverport = 5250
-        self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.connect((self.serverhostname, self.serverport))
-        self.channel = 1
-        self.layer = 50
-        self.framerate = 25
-        self._send_command("CLEAR 1")
+        self.caspar = CasparCG('localhost')
+        self.channel = self.caspar.channel(1)
+        self.media_layer = self.channel.layer(MEDIA_LAYER)
+        self.channel.clear()
         watermarkimage = 'screenbug'
-        self._play_file(watermarkimage, layer=100, loop=True)
-
-    def _disconnect(self):
-        self.socket.close()
-        self.socket = None
-
-    def _send_command(self, command, xmlreply=False):
-        self.socket.send("%s\r\n" % command)
-        logging.debug("sending command %s" % (command,))
-        bufsize = 4096
-        response = self.socket.recv(bufsize)
-        # FIXME add code to split response in first line and the rest
-        return (response, None)
+        self._play_file(watermarkimage, layer=self.channel.layer(BUG_LAYER), loop=True)
 
     def _play_file(self, filename, resume_offset=0, layer=None, loop=False):
         if layer is None:
-            layer = self.layer
+            layer = self.media_layer
+
         if filename is not None:
-            #fixme: must check caspar's own library
+            logging.debug('CasparCG is being asked to play filename %s', filename)
+
+            # To check 
+            if '/' in filename:
+                filename = 'library/%s' % (Path(filename).relative_to(configuration.media_root),)
+
+	    if resume_offset != 0:
+		seek = int(resume_offset * self.channel.framerate)
+	    else:
+		seek = 0
+
             if True: # os.path.exists(filename):
                 assetname = os.path.splitext(filename)[0]
-                if loop:
-                    loop = "LOOP"
-                else:
-                    loop = ""
-
-                if resume_offset != 0:
-                    seek = "SEEK %d" % int(resume_offset * self.framerate)
-                else:
-                    seek = ""
-
-                # FIXME filename should be escaped, ie using \" \\, etc.
-                self._send_command("PLAY %d-%d \"%s\" MIX 50 1 Linear RIGHT %s %s" %
-                                   (self.channel, layer, assetname, loop, seek))
+                try:
+                    # FIXME filename should be escaped, ie using \" \\, etc.
+                    layer.play(
+                            filename = assetname,
+                            transition = 'MIX 50 1 LINEAR RIGHT',
+                            loop = loop,
+                            seek = seek)
+                except:
+                    layer.clear()
+                    logging.error("Failed to play file: %s" % filename)
+                    raise
             else:
-                self._send_command("CLEAR %d-%d" % (self.channel, layer))
+                layer.clear()
                 logging.error(
                     "Didn't find file. Playback never started: %s" % filename)
         else:
-            self._send_command("CLEAR %d-%d" % (self.channel, layer))
+            layer.clear()
 
     def play_program(self, program=None, resume_offset=0):
         filename = None
@@ -75,7 +70,7 @@ class CasparCGPlayer(BasePlayer):
         if program is not None:
             filename = program.get_filename()
             loop = program.loop
-        self._play_file(filename, resume_offset, self.layer, loop)
+        self._play_file(filename, resume_offset, self.media_layer, loop)
 
     def show_still(self, filename):
         self._play_file(filename, resume_offset, self.layer)

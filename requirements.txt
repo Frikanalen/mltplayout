@@ -5,3 +5,7 @@ git+git://github.com/Frikanalen/python-vlc.git@fixed_setup_py#egg=python-vlc
 
 # You also need VLC, MLT and mlt-python, but those are better done through your
 # OS package manager.
+
+requests==2.20.0
+# The newer pendulum version don't work on Wheezy
+pendulum==1.5.1

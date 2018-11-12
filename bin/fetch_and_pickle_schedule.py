@@ -16,7 +16,8 @@ import requests
 
 def from_scheduleitem_to_playout(si):
     starttime = (dateutil.parser.parse(si['starttime'])
-                 .astimezone(pytz.timezone("Europe/Oslo")))
+                 .astimezone(pytz.timezone("Europe/Oslo"))
+                 .replace(tzinfo=None))
     # custom duration parser (to ms)
     duration = 1000 * sum(
         (60**n) * float(e)

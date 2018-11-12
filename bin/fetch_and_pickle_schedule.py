@@ -7,16 +7,16 @@ import math
 import os
 import pickle
 import sys
-from datetime import datetime
+from datetime import date, timedelta
+import dateutil.parser
+import pytz
 
-import pendulum
 import requests
 
 
 def from_scheduleitem_to_playout(si):
-    t = pendulum.parse(si['starttime']).in_tz('Europe/Oslo')
-    # make time naive
-    starttime = datetime(t.year, t.month, t.day, t.hour, t.minute, t.second)
+    starttime = (dateutil.parser.parse(si['starttime'])
+                 .astimezone(pytz.timezone("Europe/Oslo")))
     # custom duration parser (to ms)
     duration = 1000 * sum(
         (60**n) * float(e)
@@ -33,13 +33,13 @@ def from_scheduleitem_to_playout(si):
 def get_schedule(from_day, days):
     # Need to go one day earlier, since server does days in UTC
     # (so we are missing the first happenings of the day)
-    api_from_day = from_day.subtract(days=1).strftime('%Y%m%d')
+    api_from_day = (from_day - timedelta(days=1)).strftime('%Y%m%d')
     req = requests.get('https://frikanalen.no/api/scheduleitems/' +
                        '?date=%s&days=%s&page_size=400&ordering=starttime' %
                        (api_from_day, days + 1))
     js = req.json()
     by_day = collections.defaultdict(list)
-    last_day = from_day.add(days=days).strftime('%Y%m%d')
+    last_day = (from_day + timedelta(days=days)).strftime('%Y%m%d')
     while True:
         for sched_item in js['results']:
             playout_item = from_scheduleitem_to_playout(sched_item)
@@ -64,7 +64,7 @@ if __name__ == '__main__':
         print "and pickles each day (starting from today) to a folder."
         sys.exit(1)
     folder = sys.argv[2] if len(sys.argv) == 3 else '.'
-    from_day = pendulum.today()
+    from_day = date.today()
     schedule_by_day = get_schedule(from_day, days)
     for day, items in schedule_by_day.items():
         fn = os.path.join(folder, 'plan%s.pickle' % day)

@@ -7,5 +7,3 @@ git+git://github.com/Frikanalen/python-vlc.git@fixed_setup_py#egg=python-vlc
 # OS package manager.
 
 requests==2.20.0
-# The newer pendulum version don't work on Wheezy
-pendulum==1.5.1

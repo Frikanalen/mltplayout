@@ -8,9 +8,9 @@ import os
 import pickle
 import sys
 from datetime import date, timedelta
+
 import dateutil.parser
 import pytz
-
 import requests
 
 

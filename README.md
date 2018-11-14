@@ -51,3 +51,20 @@ your own schedule and fill up your disk with some files for this.
     # hopefully see your first movie running once, then after that the looping
     # file will continue looping.
     PYTHONPATH=lib/:src/:. python src/vision/playout.py
+
+Deploying in production
+-----------------------
+
+Quick and dirty deploy procedure:
+
+    git clone git@github.com:Frikanalen/mltplayout.git fk-playout
+    cd fk-playout
+    virtualenv -p python3 env
+    . env/bin/activate
+    pip install -r requirements.txt
+    sudo make install
+    cd ..
+    sudo mv fk-playout /opt/
+    sudo chown -Rv fk-playout:fk-developer /opt/fk-playout
+    sudo service fk-playout start
+    sudo service fk-playout status

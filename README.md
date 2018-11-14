@@ -57,7 +57,7 @@ Deploying in production
 
 Quick and dirty deploy procedure:
 
-    git clone git@github.com:Frikanalen/mltplayout.git fk-playout
+    git clone https://github.com/Frikanalen/mltplayout.git fk-playout
     virtualenv -p python3 fk-playout/env
     . fk-playout/env/bin/activate
     pip install -r fk-playout/requirements.txt

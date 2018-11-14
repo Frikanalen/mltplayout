@@ -5,8 +5,10 @@ if pidof -o %PPID -x "auto_update_schedule.sh">/dev/null; then
     return;
 fi
 while true; do
-    ~/frikanalen/env/bin/python ~/frikanalen/fkbeta/pickle_schedule.py
+    if [ -n $VIRTUAL_ENV ] ; then
+    $VIRTUAL_ENV/bin/python ~/frikanalen/fkbeta/pickle_schedule.py
     $path/update_jukebox.sh
-    python $path/playout_reload_schedule.py localhost 8889
+    $VIRTUAL_ENV/bin/python $path/playout_reload_schedule.py localhost 8889
     sleep 3600  # Refresh every hour
+fi;
 done

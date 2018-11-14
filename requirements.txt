@@ -1,4 +1,5 @@
 twisted
+autobahn
 
 # python-vlc is not packaged, get it directly from upstream
 #git+git://github.com/Frikanalen/python-vlc.git@fixed_setup_py#egg=python-vlc

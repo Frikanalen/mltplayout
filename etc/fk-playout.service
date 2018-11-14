@@ -6,7 +6,7 @@ After=syslog.target network.target
 Type=simple
 User=fk-playout
 WorkingDirectory=/opt/fk-playout
-ExecStart=/opt/fk-playout/bin/start_playout.sh
+ExecStart=/opt/fk-playout/env/bin/python bin/integrated.py
 Restart=on-abort
 
 [Install]

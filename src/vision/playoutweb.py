@@ -48,15 +48,15 @@ from autobahn.twisted.websocket import WebSocketServerFactory, WebSocketServerPr
 
 class PlayoutWebsocketProtocol(WebSocketServerProtocol):
     def __init__(self, service, playout=None, schedule=None):
-        #WebSocketServerProtocol.__init__(self)
+        super().__init__()
         self.service = service
         self.playout = playout
         self.schedule = schedule
         self.random_provider = playout.random_provider
 
     def onMessage(self, frame, binary):
-        cmd = frame[:frame.find(":")]
-        arg = frame[frame.find(":")+2:]
+        cmd = frame[:frame.find(b":")]
+        arg = frame[frame.find(b":")+2:]
         logging.info("Command from web: %s" % (repr(frame)))
         if cmd == "display-still":
             self.playout.show_still("stills/"+arg)
@@ -92,35 +92,35 @@ class PlayoutWebsocketProtocol(WebSocketServerProtocol):
         if not self.service:
             return
         self.service.add_observer(self) # Will get a lot of info from here
-        self.sendMessage("time: %s" % clock.now().ctime())
+        self.sendMessage(("time: %s" % (clock.now().ctime(),)).encode('utf-8'))
 
-    def onClose(self, reason):
+    def onClose(self, wasClean, code, reason):
         self.service.remove_observer(self)
 
     def on_playback_started(self, program):
         if not program:
             program = self.schedule.new_program()
             program.set_program(-1, program_start=clock.now(), title="*** Dead Air ***", playback_duration=float("inf"))
-            self.sendMessage("next: %s" % program.json())
+            self.sendMessage(b"next: %s" % program.json())
             logging.warning("playing '*** Dead Air ***' sent to webbrowser")
         else:
-            self.sendMessage("playing: %s" % program.json())
+            self.sendMessage(b"playing: %s" % program.json())
 
     def on_set_schedule(self, schedule):
-        self.sendMessage("schedule-updated: %s" % clock.now().ctime())
+        self.sendMessage(b"schedule-updated: %s" % clock.now().ctime())
 
     def on_set_next_program(self, program):
         if not program:
             # TODO: Set next-start, if possible, to duration-progress
             program = self.schedule.new_program()
             program.set_program(-1, program_start=clock.now(), title="*** Dead Air ***", playback_duration=float("inf"))
-            self.sendMessage("next: %s" % program.json())
+            self.sendMessage(b"next: %s" % program.json())
             logging.warning("next-program '*** Dead Air ***' sent to webbrowser")
         else:
-            self.sendMessage("next: %s" % program.json())
+            self.sendMessage(b"next: %s" % program.json())
 
     def on_still(self, name):
-        self.sendMessage("still: %s" % name)
+        self.sendMessage(b"still: %s" % name)
 
 
 

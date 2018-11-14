@@ -90,13 +90,13 @@ class Program(object):
           "program_end": end,
           "playback_offset": self.playback_offset,
           "playback_duration": duration,
-          "title": self.title.encode("utf-8")
+          "title": self.title
           }
         return d
 
     def json(self):
         d = self.to_dict()
-        return json.dumps(d)
+        return json.dumps(d).encode('utf-8')
 
 class Schedule(object):
     def __init__(self):

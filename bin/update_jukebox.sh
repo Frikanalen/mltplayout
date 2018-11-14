@@ -3,13 +3,18 @@
 # for running in cron
 set -o errexit
 
-wget -q http://frikanalen.no/api/jukebox_csv -O /tmp/jukebox.csv
+TMPFILE=$(mktemp --tmpdir=/tmp frikanalen_jukebox_XXXXXX)
 
-if [ "$(cat /tmp/jukebox.csv | wc -l)" -lt 100 ]; then
+wget -q http://frikanalen.no/api/jukebox_csv -O $TMPFILE
+
+if [ "$(cat $TMPFILE | wc -l)" -lt 100 ]; then
   echo Jukebox file is too short
   exit 1
 fi
 
 cd "$(dirname "$0")"
-mv ../cache/csvdb/jukebox_selection.csv ../cache/csvdb/jukebox_selection.csv.prev
-cp /tmp/jukebox.csv ../cache/csvdb/jukebox_selection.csv
+if [ -e ../cache/csvdb/jukebox_selection.csv ] ; then
+    mv ../cache/csvdb/jukebox_selection.csv ../cache/csvdb/jukebox_selection.csv.prev
+fi;
+
+mv $TMPFILE ../cache/csvdb/jukebox_selection.csv

@@ -62,7 +62,7 @@ Quick and dirty deploy procedure:
     . fk-playout/env/bin/activate
     pip install -r fk-playout/requirements.txt
     sudo adduser --system --no-create-home --shell /bin/nologin fk-playout
-    sudo install -m 644 etc/fk-playout.service /etc/systemd/system/
+    sudo install -m 644 fk-playout/etc/fk-playout.service /etc/systemd/system/
     sudo systemctl daemon-reload
     sudo mv fk-playout /opt/
     sudo chown -Rv fk-playout:fk-developer /opt/fk-playout

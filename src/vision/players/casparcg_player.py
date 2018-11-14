@@ -35,7 +35,6 @@ class CasparCGPlayer(BasePlayer):
         if filename is not None:
             logging.debug('CasparCG is being asked to play filename %s', filename)
 
-            # To check 
             if '/' in filename:
                 filename = 'library/%s' % (Path(filename).relative_to(configuration.media_root),)
 

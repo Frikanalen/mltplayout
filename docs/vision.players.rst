@@ -4,26 +4,13 @@ vision.players package
 Submodules
 ----------
 
-.. automodule:: vision.players.base_player
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. toctree::
 
-.. automodule:: vision.players.casparcg_player
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. automodule:: vision.players.mlt_player
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. automodule:: vision.players.vlc_player
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   vision.players.base_player
+   vision.players.casparcg
+   vision.players.casparcg_player
+   vision.players.mlt_player
+   vision.players.vlc_player
 
 Module contents
 ---------------

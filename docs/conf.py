@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.abspath('../src/'))
 
 # Generate apidocs
 from sphinx.ext.apidoc import main
-main(['-e', '-o', '.', '../src/'])
+main(['-e', '-o', '.', '../src'])
 
 # -- General configuration ------------------------------------------------
 

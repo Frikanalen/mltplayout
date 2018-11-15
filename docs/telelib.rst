@@ -4,16 +4,10 @@ telelib package
 Submodules
 ----------
 
-.. automodule:: telelib.commonweb
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. toctree::
 
-.. automodule:: telelib.utils
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   telelib.commonweb
+   telelib.utils
 
 Module contents
 ---------------

@@ -4,21 +4,11 @@ test package
 Submodules
 ----------
 
-.. automodule:: test.test_clock
-    :members:
-    :undoc-members:
-    :show-inheritance:
+.. toctree::
 
-.. automodule:: test.test_jobs
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-.. automodule:: test.test_playlist
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
+   test.test_clock
+   test.test_jobs
+   test.test_playlist
 
 Module contents
 ---------------

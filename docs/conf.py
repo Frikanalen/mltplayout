@@ -19,10 +19,11 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('../src/'))
+sys.path.insert(0, os.path.abspath('../lib/'))
 
 # Generate apidocs
 from sphinx.ext.apidoc import main
-main(['-e', '-o', '.', '../src'])
+main(['-e', '-o', '.', '../src', '../src/test/*'])
 
 # -- General configuration ------------------------------------------------
 
@@ -89,7 +90,7 @@ language = None
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
+exclude_patterns = ['test', '_build', 'Thumbs.db', '.DS_Store']
 
 # The reST default role (used for this markup: `text`) to use for all
 # documents.

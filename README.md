@@ -1,6 +1,8 @@
 Frikanalen MLT TV playout
 =========================
 
+[![Documentation Status](https://readthedocs.org/projects/mltplayout/badge/?version=latest)](https://mltplayout.readthedocs.io/en/latest/?badge=latest)
+
 The latest version of the source is available from
 https://github.com/Frikanalen/mltplayout .
 

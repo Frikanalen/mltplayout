@@ -21,7 +21,7 @@ import sys
 sys.path.insert(0, os.path.abspath('../src/'))
 
 # Generate apidocs
-from sphinx.apidoc import main
+from sphinx.ext.apidoc import main
 main(['-e', '-o', '.', '../src/'])
 
 # -- General configuration ------------------------------------------------

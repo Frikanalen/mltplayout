@@ -80,38 +80,38 @@ class CasparCGPlayer(BasePlayer):
 
     def seconds_until_end_of_playing_video(self):
         """
-INFO 1-10
-201 INFO OK
-<?xml version="1.0" encoding="utf-8"?>
-<layer>
-   <auto_delta>null</auto_delta>
-   <frame-number>2230399</frame-number>
-   <nb_frames>268</nb_frames>
-   <frames-left>4292737165</frames-left>
-   <frame-age>81</frame-age>
-   <foreground>
-      <producer>
-         <type>ffmpeg-producer</type>
-         <filename>media/AMB.mp4</filename>
-         <width>1920</width>
-         <height>1080</height>
-         <progressive>true</progressive>
-         <fps>25</fps>
-         <loop>false</loop>
-         <frame-number>2230399</frame-number>
-         <nb-frames>268</nb-frames>
-         <file-frame-number>268</file-frame-number>
-         <file-nb-frames>268</file-nb-frames>
-      </producer>
-   </foreground>
-   <background>
-      <producer>
-         <type>empty-producer</type>
-      </producer>
-   </background>
-   <index>10</index>
-</layer>
-"""
+        INFO 1-10
+        201 INFO OK
+        <?xml version="1.0" encoding="utf-8"?>
+        <layer>
+           <auto_delta>null</auto_delta>
+           <frame-number>2230399</frame-number>
+           <nb_frames>268</nb_frames>
+           <frames-left>4292737165</frames-left>
+           <frame-age>81</frame-age>
+           <foreground>
+              <producer>
+                 <type>ffmpeg-producer</type>
+                 <filename>media/AMB.mp4</filename>
+                 <width>1920</width>
+                 <height>1080</height>
+                 <progressive>true</progressive>
+                 <fps>25</fps>
+                 <loop>false</loop>
+                 <frame-number>2230399</frame-number>
+                 <nb-frames>268</nb-frames>
+                 <file-frame-number>268</file-frame-number>
+                 <file-nb-frames>268</file-nb-frames>
+              </producer>
+           </foreground>
+           <background>
+              <producer>
+                 <type>empty-producer</type>
+              </producer>
+           </background>
+           <index>10</index>
+        </layer>
+        """
         #(code, response) = self._send_command("INFO %d-%d" % (self.channel, self.layer),
         #                                      xmlreply = True)
         # xml = lxml...(response)

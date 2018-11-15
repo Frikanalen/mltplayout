@@ -13,3 +13,4 @@ websocket
 
 sphinx
 pycodestyle
+sphinx_rtd_theme

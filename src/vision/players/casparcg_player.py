@@ -13,7 +13,7 @@ import logging
 import os
 from pathlib import Path
 from vision.players.base_player import BasePlayer
-from vision.players.casparcg import CasparCG
+from pycaspar import CasparCG
 from ..configuration import configuration
 
 MEDIA_LAYER = 50

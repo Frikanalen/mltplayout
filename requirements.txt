@@ -14,3 +14,4 @@ websocket
 sphinx
 pycodestyle
 sphinx_rtd_theme
+git+https://github.com/toresbe/pycaspar.git

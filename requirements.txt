@@ -8,6 +8,10 @@ python-vlc
 # You also need VLC, MLT and mlt-python, but those are better done through your
 # OS package manager.
 
+python-dateutil
+pytz
+requests==2.20.0
+
 pathlib
 websocket
 

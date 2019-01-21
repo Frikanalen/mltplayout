@@ -9,10 +9,10 @@ from twisted.internet import reactor
 from twistedschedule.interfaces import ISchedule
 from twistedschedule.task import ScheduledCall
 
-from . import clock
-from . import jukebox
-from . import playlist
-from .configuration import configuration
+from vision import clock
+from vision import jukebox
+from vision import playlist
+from vision.configuration import configuration
 
 
 # TODO: Ident, loop, etc should be full program obects and not be

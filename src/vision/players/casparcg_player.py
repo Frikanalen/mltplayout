@@ -72,7 +72,8 @@ class CasparCGPlayer(BasePlayer):
         self._play_file(filename, resume_offset, self.media_layer, loop)
 
     def show_still(self, filename):
-        self._play_file(filename, resume_offset, self.layer)
+        resume_offset = 0
+        self._play_file(filename, resume_offset, self.media_layer)
 
     def pause_screen(self):
         # FIXME todo

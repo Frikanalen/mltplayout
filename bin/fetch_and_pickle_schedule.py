@@ -59,15 +59,15 @@ if __name__ == '__main__':
     try:
         days = int(sys.argv[1])
     except:
-        print "USAGE: %s <days> [folder_to_store_pickles]" % sys.argv[0]
-        print ""
-        print "This script gets the Frikanalen schedule from API"
-        print "and pickles each day (starting from today) to a folder."
+        print("USAGE: %s <days> [folder_to_store_pickles]" % sys.argv[0])
+        print("")
+        print("This script gets the Frikanalen schedule from API")
+        print("and pickles each day (starting from today) to a folder.")
         sys.exit(1)
     folder = sys.argv[2] if len(sys.argv) == 3 else '.'
     from_day = date.today()
     schedule_by_day = get_schedule(from_day, days)
-    for day, items in schedule_by_day.items():
+    for day, items in list(schedule_by_day.items()):
         fn = os.path.join(folder, 'plan%s.pickle' % day)
         with open(fn, 'w') as fp:
             pickle.dump(items, fp)

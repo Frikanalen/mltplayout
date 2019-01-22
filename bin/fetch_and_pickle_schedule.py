@@ -69,5 +69,5 @@ if __name__ == '__main__':
     schedule_by_day = get_schedule(from_day, days)
     for day, items in list(schedule_by_day.items()):
         fn = os.path.join(folder, 'plan%s.pickle' % day)
-        with open(fn, 'w') as fp:
+        with open(fn, 'wb') as fp:
             pickle.dump(items, fp)

@@ -25,7 +25,7 @@ class CasparCGPlayer(BasePlayer):
         self.channel = self.caspar.channel(1)
         self.media_layer = self.channel.layer(MEDIA_LAYER)
         self.channel.clear()
-        watermarkimage = 'screenbug'
+        watermarkimage = 'stills/screenbug'
         self._play_file(watermarkimage, layer=self.channel.layer(BUG_LAYER), loop=True)
 
     def _play_file(self, filename, resume_offset=0, layer=None, loop=False):
@@ -35,8 +35,8 @@ class CasparCGPlayer(BasePlayer):
         if filename is not None:
             logging.debug('CasparCG is being asked to play filename %s', filename)
 
-            if '/' in filename:
-                filename = 'library/%s' % (Path(filename).relative_to(configuration.media_root),)
+            if '/mnt/media' in filename:
+                filename = '%s' % (Path(filename).relative_to(configuration.media_root),)
 
             if resume_offset != 0:
                 seek = int(resume_offset * self.channel.framerate)

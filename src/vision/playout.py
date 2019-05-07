@@ -23,8 +23,8 @@ IDENT_LENGTH = 27.0
 #                              'FrikanalenVignett.avi')
 #LOOP_FILENAME = os.path.join(configuration.ident_media_root,
 #                             'FrikanalenLoop.avi')
-IDENT_FILENAME = 'FrikanalenVignett.avi'
-LOOP_FILENAME = 'FrikanalenLoop.avi'
+IDENT_FILENAME = 'filler/FrikanalenVignett.avi'
+LOOP_FILENAME = 'filler/FrikanalenLoop.avi'
 # make sure we have the basic required files
 #os.stat(IDENT_FILENAME)
 #os.stat(LOOP_FILENAME)

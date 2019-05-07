@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # Update the jukebox file
 # for running in cron
 set -o errexit
